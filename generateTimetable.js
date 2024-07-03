@@ -28,6 +28,7 @@ saveToCSV = (_file, _data) => {
 
 /**
  * get stage info for event
+ * not really needed at the moment as stageTitle exist in data.gigs[]
  * @param {*} _stages  array of stagescd
  * @param {*} _stageId
  * @returns Stage
