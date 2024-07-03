@@ -1,24 +1,63 @@
-# Airbeat One 2024 - Timetabler Grabber from TMSQR API
+# Airbeat One 2024 - Timetabler Grabber (TMSQR API)
 
-just a quick script in order to grab the timetable data for Airbeat One Festival 2024 from the app. 
+just a quick script in order to grab the timetable data for Airbeat One Festival 2024 from the app.
 
-creates json + csv files in `/output/`. No sync or whatever.
+Creates files in  `./output`:
+
+-  `stageCal--*.csv` 
+    - on file per stage (where `*` is the stage-name)
+    - importable into google calendars (https://calendar.google.com/calendar/u/0/r/settings/export)
+- `transformedData.csv`
+    - all data for gigs + stages w/ some additional columns (for date/time)
+- `transformedData.json`
+    - same data as the csv, but json
 
 
-## API Call for all app data
+No sync or whatever.
+
+## Wording
+
+- Gigs
+    - An Artist plays a gig on a specific time (start + end) at a related stage
+
+- Stages
+    - The different stages or floors
+    - each stage has an (int) ID
+
+- Artists
+    - Those who play gigs on stages
+    - each artist has an (int) ID
+
+- Days
+    - festival days differ from reallife days (e.g. Friday = Fr 10:00 till Sa 06:00)
+
+
+
+## API Call for all app content
+
+this call return the most important data:
 
 https://api.tmsqr.app/api/v1/festival/festivalAirbeatOne/dashboard
+
+for more discovered api urls see /doc/tmsqr-api.md
 
 
 ## Usage
 
-- currently working with local json data from `./data.json`
+- currently working with local json data from `./cache/data.json`
 
 1) `npm install`
 2) Check `./config.json` (should work with default settings)
 3) run: `npm run exec`
 4) find generated files in `/output`
 
+
+##  to do
+
+- implement caching for api-data into data.json (and keep old versions in order to track changes)
+- google calendar api with oauth (oauth=write, api key=readonly)
+- sync data between cals <-> api (one calendar per stage)
+- use data.artists also in calendar data
 
 
 # Google Kalender
