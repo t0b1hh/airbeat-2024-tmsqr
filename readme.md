@@ -1,5 +1,10 @@
 # Airbeat One 2024 - Timetabler Grabber from TMSQR API
 
+just a quick script in order to grab the timetable data for Airbeat One Festival 2024 from the app. 
+
+creates json + csv files in `/output/`. No sync or whatever.
+
+
 ## API CAll for all app data
 
 https://api.tmsqr.app/api/v1/festival/festivalAirbeatOne/dashboard
