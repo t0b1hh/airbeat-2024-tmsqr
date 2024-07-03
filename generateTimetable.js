@@ -32,7 +32,7 @@ saveToCSV = (_file, _data) => {
  * @param {*} _stageId
  * @returns Stage
  */
-getStagename = (_stages, _stageId) => {
+getStage = (_stages, _stageId) => {
     let result = _stages.filter( item => {
         return (item.id == _stageId)
     })
@@ -85,7 +85,7 @@ transformData = ( _data ) => {
         // console.log(gig.stageId);
 
         day   = getDay(_data.days, gig.dayId);
-        stage = getStagename(_data.stages, gig.stageId);
+        stage = getStage(_data.stages, gig.stageId);
 
         gig['stageName'] = stage.title;
         gig['dayName']   = day.title;
