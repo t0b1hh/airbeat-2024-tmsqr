@@ -44,15 +44,23 @@ for more discovered api urls see /doc/tmsqr-api.md
 
 ## Usage
 
-- currently working with local json data from `./cache/data.json`
-
 1) `npm install`
 2) Check `./config.json` (should work with default settings)
 3) run: `npm run exec`
+   script will call TMSQR API an do it's thing. you can also use local data (see below)
 4) find generated files in `/output`
 
 
-##  to do
+### local data
+
+For working with local data in `./cache/data.json` set config param `useAPICall` to false.
+If you'd like to use a specific data-file, set config param `dataFile`. 
+
+
+
+## To do
+
+_perhaps in 2025_ ;)
 
 - implement caching for api-data into data.json (and keep old versions in order to track changes)
 - google calendar api with oauth (oauth=write, api key=readonly)
