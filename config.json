@@ -1,0 +1,8 @@
+{
+    "useAPICall": true,
+    "tmsqrApiUrl": "https://api.tmsqr.app/api/v1/festival/festivalAirbeatOne/dashboard",
+    "outFile": "output/transformedData.json",
+    "outFileCSV": "output/transformedData.csv",
+    "stageCalendarCSVFileNames": "output/stageCal--",
+    "dataFile": "./data.json"
+}

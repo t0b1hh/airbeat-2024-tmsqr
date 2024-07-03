@@ -1,24 +1,30 @@
-require ('./inc/dateformat.js');
+const CONF = require('./config.json');
 const fs = require('fs');
 const ObjectsToCsv = require('objects-to-csv');
-
-/* CONFIG */
-let useAPICall = true;
-let tmsqrApiUrl = 'https://api.tmsqr.app/api/v1/festival/festivalAirbeatOne/dashboard';
-let outFile = 'output/transformedData.json';
-let stageCalendarCSVFileName = 'output/stageCal--';
-let dataFile = './data.json';
-/* /CONFIG */
-
+require ('./inc/dateformat.js');
 
 
 /**
  * writes and stringifies the object into file‚
- * @param {object} _json object
+ * @param {String} _file path and full file name incl. extension
+ * @param {object} _json key-value-object, not stringified
  */
-const saveToFile = (_file, _json) => {
+saveToFile = (_file, _json) => {
     fs.writeFile(_file, JSON.stringify(_json), 'utf8', ()=>{});
 }
+
+
+/**
+ * save data to csv file
+ * @param {String} _file path and full file name incl. extension
+ * @param {Object} _data key-value-object, not stringified
+ */
+saveToCSV = (_file, _data) => {
+    const csv = new ObjectsToCsv(_data);
+    csv.toDisk(_file);
+}
+
+
 
 /**
  * get stage info for event
@@ -26,12 +32,13 @@ const saveToFile = (_file, _json) => {
  * @param {*} _stageId
  * @returns Stage
  */
-const getStagename = (_stages, _stageId) => {
+getStagename = (_stages, _stageId) => {
     let result = _stages.filter( item => {
         return (item.id == _stageId)
     })
     return result[0]
 }
+
 
 /**
  * get day info for event
@@ -39,7 +46,7 @@ const getStagename = (_stages, _stageId) => {
  * @param {*} _dayId
  * @returns Day
  */
-const getDay = (_days, _dayId) => {
+getDay = (_days, _dayId) => {
     let result = _days.filter( item => {
         return (item.id == _dayId)
     })
@@ -49,10 +56,10 @@ const getDay = (_days, _dayId) => {
 
 /**
  * transform single gig into event-data as needed for csv import into google cal
- * @param {*} _gig 
- * @returns 
+ * @param {*} _gig
+ * @returns
  */
-const createCalendarEvent = (_gig) => {
+createCalendarEvent = (_gig) => {
     return {
         'Subject': _gig.title + ' @ ' + _gig.stageName,
         'Location': _gig.stageName,
@@ -64,12 +71,13 @@ const createCalendarEvent = (_gig) => {
     };
 }
 
+
 /**
  * add additional info to gig data
  * @param {Array} _data gigs
  * @returns {Array} transformed data
  */
-const transformData = ( _data ) => {
+transformData = ( _data ) => {
     let result={'data': [] }
 
     _data.gigs.forEach(gig => {
@@ -81,17 +89,17 @@ const transformData = ( _data ) => {
 
         gig['stageName'] = stage.title;
         gig['dayName']   = day.title;
-        gig['dayOrder']   = day.sortOrder;
+        gig['dayOrder']  = day.sortOrder;
         gig['startTime'] = new Date(gig.startTimestamp * 1000).format('H:i:s');
         gig['endTime']   = new Date(gig.endTimestamp * 1000).format('H:i:s');
         gig['startDate'] = new Date(gig.startTimestamp * 1000).format('Y-m-d');
         gig['endDate']   = new Date(gig.endTimestamp * 1000).format('Y-m-d');
 
         result.data.push(gig);
-        // calData.data.push( createCalendarEvent(gig) );
     })
 
-    saveToFile(outFile, result);
+    saveToFile(CONF.outFile, result);
+    saveToCSV(CONF.outFileCSV, result.data);
     return result;
 }
 
@@ -118,10 +126,12 @@ createStageCalFiles = (_stages, _transformedData) => {
         })
 
         // write to csv-file
-        let filename = stageCalendarCSVFileName + stage.title + '.csv';
-        const csv = new ObjectsToCsv(stageGigs);
-        csv.toDisk(filename);
-        console.log(csv.toString());
+        let filename = CONF.stageCalendarCSVFileNames + stage.title + '.csv';
+        saveToCSV(filename, stageGigs)
+
+        // const csv = new ObjectsToCsv(stageGigs);
+        // csv.toDisk(filename);
+        // console.log(csv.toString());
     }) // walk to the next stage
 }
 
@@ -129,27 +139,28 @@ createStageCalFiles = (_stages, _transformedData) => {
  * Main
  */
 let data;
-if (useAPICall) {
+if (CONF.useAPICall) {
     // grab data from tmsqr api  -> somehow undefined
     console.log('calling TMSQR Api...');+
 
-    fetch(tmsqrApiUrl, {
+    fetch(CONF.tmsqrApiUrl, {
             method: "GET"
         })
     .then( response => console.log(response.status) || response )
     .then( response => response.json() )
     .then( response => {
-        data = response.data;
         console.log('received data from API');
-        console.log(data)
+        data = response.data;
         let transformedData = transformData(data);
         createStageCalFiles(data.stages, transformedData.data);
         console.log('Done using TMSQR API');
+        // @todo cache data.json and archive old file
+        // @todo show diff to previous version
     })
 
 } else {
     // use local data.json file
-    data = require(dataFile).data;
+    data = require(CONF.dataFile).data;
     let transformedData = transformData(data);
     createStageCalFiles(data.stages, transformedData.data);
     console.log('Done using local data');

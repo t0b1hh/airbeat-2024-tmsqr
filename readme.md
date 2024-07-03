@@ -15,8 +15,9 @@ https://api.tmsqr.app/api/v1/festival/festivalAirbeatOne/dashboard
 - currently working with local json data from `./data.json`
 
 1) `npm install`
-2) run: `npm run exec`
-3) find generated files in `/output`
+2) Check `./config.json` (should work with default settings)
+3) run: `npm run exec`
+4) find generated files in `/output`
 
 
 
