@@ -4,5 +4,5 @@
     "outFile": "output/transformedData.json",
     "outFileCSV": "output/transformedData.csv",
     "stageCalendarCSVFileNames": "output/stageCal--",
-    "dataFile": "./data.json"
+    "dataFile": "./cache/data.json"
 }
