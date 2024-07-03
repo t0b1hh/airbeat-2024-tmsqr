@@ -1,0 +1,15 @@
+{
+  "name": "airbeat-2024-tmsqr",
+  "version": "1.0.0",
+  "description": "## API CAll for all app data",
+  "main": "generateTimetable.js",
+  "scripts": {
+    "exec": "node generateTimetable.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "objects-to-csv": "^1.3.6"
+  }
+}
