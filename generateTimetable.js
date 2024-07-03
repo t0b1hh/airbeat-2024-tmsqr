@@ -3,11 +3,11 @@ const fs = require('fs');
 const ObjectsToCsv = require('objects-to-csv');
 
 /* CONFIG */
-let useAPICall = false;
+let useAPICall = true;
 let tmsqrApiUrl = 'https://api.tmsqr.app/api/v1/festival/festivalAirbeatOne/dashboard';
 let outFile = 'output/transformedData.json';
 let stageCalendarCSVFileName = 'output/stageCal--';
-let data = require('./data.json').data;
+let dataFile = './data.json';
 /* /CONFIG */
 
 
@@ -70,9 +70,7 @@ const createCalendarEvent = (_gig) => {
  * @returns {Array} transformed data
  */
 const transformData = ( _data ) => {
-
     let result={'data': [] }
-    let calData={'data': [] }
 
     _data.gigs.forEach(gig => {
         // console.log(gig);
@@ -130,20 +128,29 @@ createStageCalFiles = (_stages, _transformedData) => {
 /**
  * Main
  */
+let data;
 if (useAPICall) {
-    // grab data from tmsqr api
+    // grab data from tmsqr api  -> somehow undefined
+    console.log('calling TMSQR Api...');+
+
     fetch(tmsqrApiUrl, {
             method: "GET"
         })
     .then( response => console.log(response.status) || response )
-    .then( response => response.text.data )
-    .then( data => {
-        let transformedData = transformData(data.data);
+    .then( response => response.json() )
+    .then( response => {
+        data = response.data;
+        console.log('received data from API');
+        console.log(data)
+        let transformedData = transformData(data);
         createStageCalFiles(data.stages, transformedData.data);
+        console.log('Done using TMSQR API');
     })
 
 } else {
     // use local data.json file
+    data = require(dataFile).data;
     let transformedData = transformData(data);
     createStageCalFiles(data.stages, transformedData.data);
+    console.log('Done using local data');
 }
