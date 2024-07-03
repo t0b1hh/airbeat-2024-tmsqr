@@ -97,7 +97,6 @@ const transformData = ( _data ) => {
     return result;
 }
 
-
 /**
  * writes csv file per stage to disk
  * @param {Array} _stages
@@ -107,13 +106,13 @@ createStageCalFiles = (_stages, _transformedData) => {
     console.log(_stages);
 
     _stages.forEach( stage => {
-        // filter
+        // filter gigs on this stage
         let stageGigs=[];
-
         let filteredGigs = _transformedData.filter( item => {
             return (item.stageTitle == stage.title)
         })
 
+        // we only need specific columns with defined col names in our csvs
         filteredGigs.forEach(_gig => {
             if (_gig.startDate != "1970-01-01") {
                 stageGigs.push( createCalendarEvent(_gig) );
@@ -125,17 +124,14 @@ createStageCalFiles = (_stages, _transformedData) => {
         const csv = new ObjectsToCsv(stageGigs);
         csv.toDisk(filename);
         console.log(csv.toString());
-
-
-    }) // next stage
-
+    }) // walk to the next stage
 }
 
 /**
  * Main
  */
 if (useAPICall) {
-
+    // grab data from tmsqr api
     fetch(tmsqrApiUrl, {
             method: "GET"
         })
@@ -147,6 +143,7 @@ if (useAPICall) {
     })
 
 } else {
+    // use local data.json file
     let transformedData = transformData(data);
     createStageCalFiles(data.stages, transformedData.data);
 }
