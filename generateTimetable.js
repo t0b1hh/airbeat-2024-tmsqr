@@ -7,10 +7,7 @@ let useAPICall = false;
 let tmsqrApiUrl = 'https://api.tmsqr.app/api/v1/festival/festivalAirbeatOne/dashboard';
 let outFile = 'output/transformedData.json';
 let stageCalendarCSVFileName = 'output/stageCal--';
-
-// let data;
 let data = require('./data.json').data;
-
 /* /CONFIG */
 
 
@@ -24,7 +21,7 @@ const saveToFile = (_file, _json) => {
 }
 
 /**
- *
+ * get stage info for event
  * @param {*} _stages  array of stagescd
  * @param {*} _stageId
  * @returns Stage
@@ -37,7 +34,7 @@ const getStagename = (_stages, _stageId) => {
 }
 
 /**
- *
+ * get day info for event
  * @param {*} _days array of days
  * @param {*} _dayId
  * @returns Day
@@ -49,6 +46,12 @@ const getDay = (_days, _dayId) => {
     return result[0]
 }
 
+
+/**
+ * transform single gig into event-data as needed for csv import into google cal
+ * @param {*} _gig 
+ * @returns 
+ */
 const createCalendarEvent = (_gig) => {
     return {
         'Subject': _gig.title + ' @ ' + _gig.stageName,
@@ -61,7 +64,11 @@ const createCalendarEvent = (_gig) => {
     };
 }
 
-
+/**
+ * add additional info to gig data
+ * @param {Array} _data gigs
+ * @returns {Array} transformed data
+ */
 const transformData = ( _data ) => {
 
     let result={'data': [] }
@@ -91,7 +98,11 @@ const transformData = ( _data ) => {
 }
 
 
-
+/**
+ * writes csv file per stage to disk
+ * @param {Array} _stages
+ * @param {Array} _transformedData.data
+ */
 createStageCalFiles = (_stages, _transformedData) => {
     console.log(_stages);
 
@@ -120,11 +131,9 @@ createStageCalFiles = (_stages, _transformedData) => {
 
 }
 
-
-
-
-
-
+/**
+ * Main
+ */
 if (useAPICall) {
 
     fetch(tmsqrApiUrl, {
@@ -141,4 +150,3 @@ if (useAPICall) {
     let transformedData = transformData(data);
     createStageCalFiles(data.stages, transformedData.data);
 }
-
