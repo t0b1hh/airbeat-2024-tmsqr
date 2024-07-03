@@ -53,8 +53,8 @@ for more discovered api urls see /doc/tmsqr-api.md
 
 ### local data
 
-For working with local data in `./cache/data.json` set config param `useAPICall` to false.
-If you'd like to use a specific data-file, set config param `dataFile`. 
+For working with local data in `./cache/data-YYYY-MM-DD.json` set config param `useAPICall` to false.
+If you'd like to use a specific data-file, set config param `dataFile`.
 
 
 
@@ -62,7 +62,7 @@ If you'd like to use a specific data-file, set config param `dataFile`.
 
 _perhaps in 2025_ ;)
 
-- implement caching for api-data into data.json (and keep old versions in order to track changes)
+- implement caching for api-data into data-YYYY-MM-DD.json (and keep old versions in order to track changes)
 - google calendar api with oauth (oauth=write, api key=readonly)
 - sync data between cals <-> api (one calendar per stage)
 - use data.artists also in calendar data

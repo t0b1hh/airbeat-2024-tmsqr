@@ -1,7 +1,7 @@
 {
     "useAPICall": true,
     "tmsqrApiUrl": "https://api.tmsqr.app/api/v1/festival/festivalAirbeatOne/dashboard",
-    "dataFile": "./cache/data.json",
+    "dataFile": "./cache/data-2024-07-03.json",
 
     "outFile": "output/transformedData.json",
     "outFileCSV": "output/transformedData.csv",
